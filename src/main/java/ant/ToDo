@@ -60,26 +60,3 @@
 
 
 ---------
-
-function sendPerson(url, sendJson) {
-            let json = (sendJson === null )? {
-                login: document.getElementById("username").value,
-                password: document.getElementById("password").value,
-            }
-                :
-            sendJson;
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "http://localhost:7777" + url, true);
-            xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
-            xhr.onreadystatechange = function () {
-               if (this.readyState !== 4)return;
-               let obj = JSON.parse(this.responseText);
-               document.getElementById("RESULT").innerHTML = this.responseText;
-               if (obj.session !== undefined){
-                   sessionID = obj.session.id;
-                   alert("Session id = "+ sessionID);
-               }
-
-            }
-            xhr.send(JSON.stringify(json));
-        }

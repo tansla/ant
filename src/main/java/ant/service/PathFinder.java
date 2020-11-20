@@ -111,4 +111,8 @@ public class PathFinder {
     public static List<Coordinate> getThePath() {
         return thePath;
     }
+
+    public static Coordinate getNextPoint() {
+        return thePath.remove(0);
+    }
 }

@@ -16,22 +16,23 @@ public class AntController {
         @Autowired
         private static RestTemplate restTemplate;
 
-        private static String url = "http://176.12.100.246:7777/hello";
+        private static String url = "http://176.12.100.246:7777/";
 
 
-    public static IncomingDTO helloRequest(@RequestBody OutcomingDTO request){
+    public static IncomingDTO postRequest(@RequestBody OutcomingDTO request, boolean isHello){
         System.out.println(request.toString());
         restTemplate = new RestTemplate();
-
+        String updatedURL =  url + (isHello ? "hello" : "try_to_move");
         ResponseEntity<IncomingDTO> response =
-                restTemplate.postForEntity(url,request, IncomingDTO.class);
+                restTemplate.postForEntity(updatedURL,request, IncomingDTO.class);
    //       IncomingDTO result = restTemplate.postForObject(url, request,IncomingDTO.class);
 
         IncomingDTO result = response.getBody();
-        System.out.println(result.toString());
+      //  System.out.println(result.toString());
 
 
         return result;
     }
+
 
 }

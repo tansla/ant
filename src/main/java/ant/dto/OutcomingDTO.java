@@ -12,7 +12,10 @@ public class OutcomingDTO {
     private int[] next_step_coords;
 
     public void setNext_step_coords(Coordinate next_step_coords) {
+        this.next_step_coords = new int[2];
         this.next_step_coords[0] = next_step_coords.getX();
         this.next_step_coords[1] = next_step_coords.getY();
     }
+
+
 }
