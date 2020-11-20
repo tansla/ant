@@ -1,0 +1,85 @@
+1. подключение к серверу 176.12.100.246:7777
+		// ключ F583CB63-3A8D-3269-A7F7-598D6DE5D83C
+2. получить карту http://176.12.100.246:7777/hello
+     Method "POST" на http://адрес_сервера:порт/hello
+          Тело запроса:
+               { "antKey" : "A29AD6BB-13AB-3B1A-8BB5-7797396BF8E2"}
+  Ответ :
+               {
+                    "map": [
+                         [],[],[],[],
+                         [],[],[],[]
+                    ], // карта на которой вы родились
+                    "start_coords": [5,6], // ваши координаты  [x, y]
+                    "current_target": [6,2] //Ваша цель(еда) [x, y]
+               }
+
+     Что такое карта:
+          Двумерный массив 21x21 клеток.
+          Внимание!!  1ый индекс это x, а второй y.
+
+     Условные обозначения на карте:
+          0 - свободное место(можно пройти)
+          1 – препятствие (нужно обойти).
+
+
+3. Считать данные из ответа в объект - карту + точки старт - финиш
+
+цикл:
+построить путь
+сделать 1 шаг:
+ запрос
+ проверка ответа
+ ЛОГИ!
+если все ок:
+    меняем точку старта
+    проверяем не изменилась ли цель:
+         нет - след шаг
+         да - строим путь
+
+
+		         Method "POST" на http://адрес_сервера:порт/try_to_move
+          Тело запроса:
+               {
+                    "antKey": "A29AD6BB-13AB-3B1A-8BB5-7797396BF8E2",
+                    "next_step_coords": [6,7] // [x, y]
+               }
+                    Ответ :
+               {
+                    "permition": "MOVE", // ответ на ваш запрос о движении
+                    "current_target": [6,2] // координаты еды [x, y]
+               }
+          Значения "permition" :
+               MOVE - движение разрешено, муравей походил(уже на новой клетке)
+               STOP - движение запрещено, попробуй через 2 секунды(2000 мс)
+               ERROR - твой муравей ошибся 1ый раз
+               YOU_DIED - начать заново (Вызови "/Hello" снова)
+               COMPLETE - зачёт сдан.
+
+
+
+
+---------
+
+function sendPerson(url, sendJson) {
+            let json = (sendJson === null )? {
+                login: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+            }
+                :
+            sendJson;
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:7777" + url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+            xhr.onreadystatechange = function () {
+               if (this.readyState !== 4)return;
+               let obj = JSON.parse(this.responseText);
+               document.getElementById("RESULT").innerHTML = this.responseText;
+               if (obj.session !== undefined){
+                   sessionID = obj.session.id;
+                   alert("Session id = "+ sessionID);
+               }
+
+            }
+            xhr.send(JSON.stringify(json));
+        }
